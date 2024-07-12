@@ -50,9 +50,11 @@ def ShowProductId(request, pk):
 @api_view(['POST'])
 def CreateProduct(request):
     serializer = ProductSerializer(data=request.data)
+    print("data Serializer", serializer)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
+        return Response({'messagetype' : 'S', 'message' : 'create Product Successfully', 'data' :serializer.data}, status=status.HTTP_201_CREATED)
+    return Response({'messagetype' : 'E', 'message':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def UpdateProduct(request, pk):
@@ -64,7 +66,7 @@ def UpdateProduct(request, pk):
     serializer = ProductSerializer(instance=product, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'messagetype' : 'S', 'message' : 'Update Success', 'data' : serializer.data}, status=status.http_200_ok)
+        return Response({'messagetype' : 'S', 'message' : 'Update Success', 'data' : serializer.data}, status=status.HTTP_200_OK)
     return Response({'messagetype' : 'E', 'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
